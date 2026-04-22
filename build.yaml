@@ -1,0 +1,15 @@
+targets:
+  $default:
+    builders:
+      freezed:freezed:
+        generate_for:
+          include:
+            - lib/**
+      json_serializable:json_serializable:
+        generate_for:
+          include:
+            - lib/**
+      source_gen:combining_builder:
+        options:
+          ignore_for_file:
+            - type=lint
