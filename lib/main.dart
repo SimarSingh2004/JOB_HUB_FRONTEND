@@ -3,5 +3,5 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'app.dart';
 
 void main() {
-  const ProviderScope(child: JobHubApp());
+  runApp(const ProviderScope(child: JobHubApp()));
 }
