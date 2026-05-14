@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/errors/app_exception.dart';
 import '../../../../core/network/dio_client.dart';

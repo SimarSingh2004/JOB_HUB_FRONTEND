@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+// ignore: unused_import
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../constants/api_constants.dart';
 import '../storage/secure_storage.dart';
@@ -83,9 +84,7 @@ class _AuthInterceptor extends Interceptor {
         // Call your /auth/refresh-token endpoint
         // We use a NEW Dio instance here — not _dio — to avoid
         // triggering this interceptor again (infinite loop prevention)
-        final refreshDio = Dio(
-          BaseOptions(baseUrl: ApiConstants.baseUrl),
-        );
+        final refreshDio = Dio(BaseOptions(baseUrl: ApiConstants.baseUrl));
 
         final response = await refreshDio.post(
           ApiConstants.refreshToken,
@@ -93,8 +92,7 @@ class _AuthInterceptor extends Interceptor {
         );
 
         // Your backend returns { data: { accessToken } }
-        final newAccessToken =
-            response.data['data']['accessToken'] as String;
+        final newAccessToken = response.data['data']['accessToken'] as String;
 
         final newRefreshToken =
             response.data['data']['refreshToken'] as String? ?? refreshToken;
