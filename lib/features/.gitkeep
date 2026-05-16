@@ -1,0 +1,76 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../router/app_router.dart';
+import '../viewmodels/auth_viewmodel.dart';
+
+// ConsumerStatefulWidget = StatefulWidget that can read Riverpod providers.
+// We need StatefulWidget here because we want to run navigation logic
+// once after the auth check completes — using a listener, not rebuild.
+class SplashScreen extends ConsumerStatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends ConsumerState<SplashScreen> {
+  bool _hasRouted = false;
+
+  void _navigateForAuth(AuthState authState) {
+    if (!mounted) return;
+
+    if (authState.isAuthenticated) {
+      final role = authState.user!.role;
+      if (role == 'recruiter') {
+        context.go(AppRoutes.recruiterHome);
+      } else {
+        context.go(AppRoutes.candidateHome);
+      }
+    } else {
+      context.go(AppRoutes.login);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.listen<AsyncValue<AuthState>>(authViewModelProvider, (previous, next) {
+      if (!mounted || _hasRouted) return;
+
+      next.when(
+        data: (authState) {
+          if (authState.isLoading) return;
+          _hasRouted = true;
+          _navigateForAuth(authState);
+        },
+        loading: () {},
+        error: (_, __) {
+          _hasRouted = true;
+          context.go(AppRoutes.login);
+        },
+      );
+    });
+
+    return const Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.work_rounded, size: 64, color: Color(0xFF4F46E5)),
+            SizedBox(height: 16),
+            Text(
+              'JobHub',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF4F46E5),
+              ),
+            ),
+            SizedBox(height: 32),
+            CircularProgressIndicator(color: Color(0xFF4F46E5)),
+          ],
+        ),
+      ),
+    );
+  }
+}

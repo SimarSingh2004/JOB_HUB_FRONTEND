@@ -51,7 +51,11 @@ class AuthViewModel extends AsyncNotifier<AuthState> {
     final repo = ref.read(authRepositoryProvider);
     final stored = await repo.getStoredAuth();
 
+    // print('AUTH BUILD: role=${stored.role}, userId=${stored.userId}');
+
     if (stored.role != null && stored.userId != null) {
+      //  print('AUTH BUILD: returning authenticated state');
+
       return AuthState(
         user: UserModel(
           id: stored.userId!,
@@ -65,24 +69,37 @@ class AuthViewModel extends AsyncNotifier<AuthState> {
     }
 
     // No stored credentials — user needs to log in
+    // print('AUTH BUILD: returning unauthenticated state');
+
     return const AuthState();
   }
 
   Future<void> login({required String email, required String password}) async {
     final repo = ref.read(authRepositoryProvider);
+    print('LOGIN: starting, email=$email');
 
     // Set loading state — keeps current user data, clears error, sets loading
     state = AsyncData(state.value!.copyWith(isLoading: true, clearError: true));
+    print('LOGIN: state set to loading');
 
     try {
       final user = await repo.login(email: email, password: password);
+      print('LOGIN: success, user=${user.id}, role=${user.role}');
 
       // Success — store user, clear loading
       state = AsyncData(AuthState(user: user));
     } on AppException catch (e) {
+      print('LOGIN: AppException caught: ${e.message}');
+
       // Failure — clear loading, set error message
       state = AsyncData(
         state.value!.copyWith(isLoading: false, error: e.message),
+      );
+    } catch (e) {
+      // This catches anything that isn't AppException
+      print('LOGIN: unknown error caught: $e');
+      state = AsyncData(
+        state.value!.copyWith(isLoading: false, error: e.toString()),
       );
     }
   }
