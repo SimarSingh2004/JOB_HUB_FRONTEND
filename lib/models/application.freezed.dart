@@ -23,8 +23,10 @@ ApplicationModel _$ApplicationModelFromJson(Map<String, dynamic> json) {
 mixin _$ApplicationModel {
   @JsonKey(name: '_id')
   String get id => throw _privateConstructorUsedError;
-  JobModel get job => throw _privateConstructorUsedError;
-  String get candidate => throw _privateConstructorUsedError;
+  JobModel get job =>
+      throw _privateConstructorUsedError; // candidateData holds the populated candidate object when available
+  @JsonKey(name: 'candidate')
+  dynamic get candidateRaw => throw _privateConstructorUsedError;
   String get status => throw _privateConstructorUsedError;
   String? get createdAt => throw _privateConstructorUsedError;
 
@@ -48,7 +50,7 @@ abstract class $ApplicationModelCopyWith<$Res> {
   $Res call({
     @JsonKey(name: '_id') String id,
     JobModel job,
-    String candidate,
+    @JsonKey(name: 'candidate') dynamic candidateRaw,
     String status,
     String? createdAt,
   });
@@ -73,7 +75,7 @@ class _$ApplicationModelCopyWithImpl<$Res, $Val extends ApplicationModel>
   $Res call({
     Object? id = null,
     Object? job = null,
-    Object? candidate = null,
+    Object? candidateRaw = freezed,
     Object? status = null,
     Object? createdAt = freezed,
   }) {
@@ -87,10 +89,10 @@ class _$ApplicationModelCopyWithImpl<$Res, $Val extends ApplicationModel>
                 ? _value.job
                 : job // ignore: cast_nullable_to_non_nullable
                       as JobModel,
-            candidate: null == candidate
-                ? _value.candidate
-                : candidate // ignore: cast_nullable_to_non_nullable
-                      as String,
+            candidateRaw: freezed == candidateRaw
+                ? _value.candidateRaw
+                : candidateRaw // ignore: cast_nullable_to_non_nullable
+                      as dynamic,
             status: null == status
                 ? _value.status
                 : status // ignore: cast_nullable_to_non_nullable
@@ -127,7 +129,7 @@ abstract class _$$ApplicationModelImplCopyWith<$Res>
   $Res call({
     @JsonKey(name: '_id') String id,
     JobModel job,
-    String candidate,
+    @JsonKey(name: 'candidate') dynamic candidateRaw,
     String status,
     String? createdAt,
   });
@@ -152,7 +154,7 @@ class __$$ApplicationModelImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? job = null,
-    Object? candidate = null,
+    Object? candidateRaw = freezed,
     Object? status = null,
     Object? createdAt = freezed,
   }) {
@@ -166,10 +168,10 @@ class __$$ApplicationModelImplCopyWithImpl<$Res>
             ? _value.job
             : job // ignore: cast_nullable_to_non_nullable
                   as JobModel,
-        candidate: null == candidate
-            ? _value.candidate
-            : candidate // ignore: cast_nullable_to_non_nullable
-                  as String,
+        candidateRaw: freezed == candidateRaw
+            ? _value.candidateRaw
+            : candidateRaw // ignore: cast_nullable_to_non_nullable
+                  as dynamic,
         status: null == status
             ? _value.status
             : status // ignore: cast_nullable_to_non_nullable
@@ -189,7 +191,7 @@ class _$ApplicationModelImpl implements _ApplicationModel {
   const _$ApplicationModelImpl({
     @JsonKey(name: '_id') required this.id,
     required this.job,
-    required this.candidate,
+    @JsonKey(name: 'candidate') required this.candidateRaw,
     this.status = 'applied',
     this.createdAt,
   });
@@ -202,8 +204,10 @@ class _$ApplicationModelImpl implements _ApplicationModel {
   final String id;
   @override
   final JobModel job;
+  // candidateData holds the populated candidate object when available
   @override
-  final String candidate;
+  @JsonKey(name: 'candidate')
+  final dynamic candidateRaw;
   @override
   @JsonKey()
   final String status;
@@ -212,7 +216,7 @@ class _$ApplicationModelImpl implements _ApplicationModel {
 
   @override
   String toString() {
-    return 'ApplicationModel(id: $id, job: $job, candidate: $candidate, status: $status, createdAt: $createdAt)';
+    return 'ApplicationModel(id: $id, job: $job, candidateRaw: $candidateRaw, status: $status, createdAt: $createdAt)';
   }
 
   @override
@@ -222,8 +226,10 @@ class _$ApplicationModelImpl implements _ApplicationModel {
             other is _$ApplicationModelImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.job, job) || other.job == job) &&
-            (identical(other.candidate, candidate) ||
-                other.candidate == candidate) &&
+            const DeepCollectionEquality().equals(
+              other.candidateRaw,
+              candidateRaw,
+            ) &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt));
@@ -231,8 +237,14 @@ class _$ApplicationModelImpl implements _ApplicationModel {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, job, candidate, status, createdAt);
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    job,
+    const DeepCollectionEquality().hash(candidateRaw),
+    status,
+    createdAt,
+  );
 
   /// Create a copy of ApplicationModel
   /// with the given fields replaced by the non-null parameter values.
@@ -255,7 +267,7 @@ abstract class _ApplicationModel implements ApplicationModel {
   const factory _ApplicationModel({
     @JsonKey(name: '_id') required final String id,
     required final JobModel job,
-    required final String candidate,
+    @JsonKey(name: 'candidate') required final dynamic candidateRaw,
     final String status,
     final String? createdAt,
   }) = _$ApplicationModelImpl;
@@ -267,9 +279,10 @@ abstract class _ApplicationModel implements ApplicationModel {
   @JsonKey(name: '_id')
   String get id;
   @override
-  JobModel get job;
+  JobModel get job; // candidateData holds the populated candidate object when available
   @override
-  String get candidate;
+  @JsonKey(name: 'candidate')
+  dynamic get candidateRaw;
   @override
   String get status;
   @override
