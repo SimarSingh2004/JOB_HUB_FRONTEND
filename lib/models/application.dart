@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'job.dart';
+// ignore: unused_import
 import 'user.dart';
 
 part 'application.freezed.dart';
