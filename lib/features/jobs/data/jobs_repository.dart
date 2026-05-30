@@ -26,4 +26,31 @@ class JobsRepository {
   Future<void> applyToJob(String jobId) {
     return _remote.applyToJob(jobId);
   }
+
+  Future<JobModel> createJob({
+    required String title,
+    required String description,
+    required List<String> skillsRequired,
+    double? salary,
+    String? location,
+  }) {
+    return _remote.createJob(
+      title: title,
+      description: description,
+      skillsRequired: skillsRequired,
+      salary: salary,
+      location: location,
+    );
+  }
+
+  Future<JobModel> updateJob({
+    required String jobId,
+    required Map<String, dynamic> data,
+  }) {
+    return _remote.updateJob(jobId: jobId, data: data);
+  }
+
+  Future<void> deleteJob(String jobId) {
+    return _remote.deleteJob(jobId);
+  }
 }

@@ -108,4 +108,54 @@ class JobsRemoteDataSource {
       throw AppException.fromDioError(e);
     }
   }
+
+  // POST /jobs — recruiter only
+  Future<JobModel> createJob({
+    required String title,
+    required String description,
+    required List<String> skillsRequired,
+    required double? salary,
+    required String? location,
+  }) async {
+    try {
+      final response = await _dio.post(
+        ApiConstants.jobs,
+        data: {
+          'title': title,
+          'description': description,
+          'skillsRequired': skillsRequired,
+          if (salary != null) 'salary': salary,
+          if (location != null && location.isNotEmpty) 'location': location,
+        },
+      );
+      return JobModel.fromJson(response.data['data'] as Map<String, dynamic>);
+    } on DioException catch (e) {
+      throw AppException.fromDioError(e);
+    }
+  }
+
+  // PATCH /jobs/:id — recruiter only, only owner can update
+  Future<JobModel> updateJob({
+    required String jobId,
+    required Map<String, dynamic> data,
+  }) async {
+    try {
+      final response = await _dio.patch(
+        '${ApiConstants.jobs}/$jobId',
+        data: data,
+      );
+      return JobModel.fromJson(response.data['data'] as Map<String, dynamic>);
+    } on DioException catch (e) {
+      throw AppException.fromDioError(e);
+    }
+  }
+
+  // DELETE /jobs/:id — soft delete, sets isActive: false
+  Future<void> deleteJob(String jobId) async {
+    try {
+      await _dio.delete('${ApiConstants.jobs}/$jobId');
+    } on DioException catch (e) {
+      throw AppException.fromDioError(e);
+    }
+  }
 }
