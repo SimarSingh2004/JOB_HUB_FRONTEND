@@ -143,6 +143,7 @@ class _RecruiterHomeScreenState extends ConsumerState<RecruiterHomeScreen> {
           return JobCard(
             job: job,
             onTap: () => context.push(AppRoutes.jobDetail, extra: job.id),
+            onLongPress: () => context.push(AppRoutes.postJob, extra: job),
           );
         },
       ),

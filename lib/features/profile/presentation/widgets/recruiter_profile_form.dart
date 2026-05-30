@@ -60,20 +60,6 @@ class _RecruiterProfileFormState extends ConsumerState<RecruiterProfileForm> {
     final profileAsync = ref.watch(profileViewModelProvider);
     final isSaving = profileAsync.value?.isSaving ?? false;
     final saveError = profileAsync.value?.saveError;
-    final saveSuccess = profileAsync.value?.saveSuccess ?? false;
-
-    if (saveSuccess) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Profile saved!'),
-            backgroundColor: Colors.green,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-        ref.read(profileViewModelProvider.notifier).clearSaveSuccess();
-      });
-    }
 
     return Form(
       key: _formKey,

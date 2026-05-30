@@ -6,13 +6,21 @@ import '../../../../models/job.dart';
 class JobCard extends StatelessWidget {
   final JobModel job;
   final VoidCallback onTap;
+  final VoidCallback?
+  onLongPress; // optional long press for edit (recruiter only)
 
-  const JobCard({super.key, required this.job, required this.onTap});
+  const JobCard({
+    super.key,
+    required this.job,
+    required this.onTap,
+    this.onLongPress,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap, // Card tap triggers navigation to job details
+      onLongPress: onLongPress, // Long press (if provided) triggers edit
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         padding: const EdgeInsets.all(16),

@@ -14,6 +14,22 @@ class ProfileScreen extends ConsumerWidget {
     final authState = ref.watch(authViewModelProvider).value;
     final role = authState?.user?.role ?? 'candidate';
 
+    ref.listen<AsyncValue<ProfileState>>(profileViewModelProvider, (_, next) {
+      next.whenData((state) {
+        if (state.saveSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Profile saved successfully!'),
+              backgroundColor: Colors.green,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+
+          ref.read(profileViewModelProvider.notifier).clearSaveSuccess();
+        }
+      });
+    });
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8F8FC),
       body: SafeArea(
