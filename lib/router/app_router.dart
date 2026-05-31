@@ -162,7 +162,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
       // Candidate shell — bottom nav wraps all candidate tabs
       ShellRoute(
-        builder: (_, __, child) => ShellScreen(child: child, isCandidate: true),
+        builder: (_, __, child) => ShellScreen(isCandidate: true, child: child),
         routes: [
           GoRoute(
             path: AppRoutes.candidateHome,
@@ -190,7 +190,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // Recruiter shell
       ShellRoute(
         builder: (_, __, child) =>
-            ShellScreen(child: child, isCandidate: false),
+            ShellScreen(isCandidate: false, child: child),
         routes: [
           GoRoute(
             path: AppRoutes.recruiterHome,
