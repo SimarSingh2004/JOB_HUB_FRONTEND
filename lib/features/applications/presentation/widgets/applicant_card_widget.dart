@@ -9,12 +9,16 @@ class ApplicantCard extends StatelessWidget {
   final ApplicationModel application;
   final bool isUpdating;
   final void Function(String newStatus) onStatusUpdate;
+  final String jobId;
+  final void Function()? onMessage; //null=not yet  shortlisted
 
   const ApplicantCard({
     super.key,
     required this.application,
     required this.isUpdating,
     required this.onStatusUpdate,
+    required this.jobId,
+    required this.onMessage,
   });
 
   // Mirror your backend's validTransitions map:
@@ -156,6 +160,32 @@ class ApplicantCard extends StatelessWidget {
                         .toList(),
                   ),
           ],
+
+          if (application.status == 'shortlisted' ||
+              application.status == 'accepted')
+            Padding(
+              padding: const EdgeInsets.only(right: 6),
+              child: GestureDetector(
+                onTap: onMessage,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE6F1FB),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'Message',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF0C447C),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:job_hub/features/chat/presentation/viewmodels/conversations_viewmodel.dart';
+import 'package:job_hub/models/application.dart';
+import 'package:job_hub/router/app_router.dart';
 import '../viewmodels/applicants_viewmodel.dart';
 import '../widgets/applicant_card_widget.dart';
 
@@ -137,6 +141,7 @@ class _ApplicantsScreenState extends ConsumerState<ApplicantsScreen> {
           final application = state.applicants[index];
           return ApplicantCard(
             application: application,
+            jobId: widget.jobId,
             // Is THIS specific card being updated?
             isUpdating: state.updatingApplicationId == application.id,
             onStatusUpdate: (newStatus) => ref
@@ -145,6 +150,28 @@ class _ApplicantsScreenState extends ConsumerState<ApplicantsScreen> {
                   applicationId: application.id,
                   newStatus: newStatus,
                 ),
+            onMessage: () async {
+              final repo = ref.read(chatRepositoryProvider);
+              try {
+                final conversation = await repo.createOrGetConversation(
+                  jobId: widget.jobId,
+                  candidateId: application.candidate,
+                );
+                if (context.mounted) {
+                  context.push(AppRoutes.chat, extra: conversation.id);
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to open chat: $e'),
+                      backgroundColor: Colors.red.shade700,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                }
+              }
+            },
           );
         },
       ),

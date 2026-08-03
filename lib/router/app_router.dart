@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:job_hub/features/applications/presentation/screens/applicants_screen.dart';
+import 'package:job_hub/features/applications/presentation/screens/my_applications_screen.dart';
+import 'package:job_hub/features/jobs/presentation/screens/post_job_screen.dart';
+import 'package:job_hub/features/profile/presentation/screens/profile_screen.dart';
+import 'package:job_hub/models/job.dart';
 import '../features/auth/presentation/screens/login_screen.dart';
 import '../features/auth/presentation/screens/register_screen.dart';
 import '../features/auth/presentation/screens/splash_screen.dart';
 import '../features/jobs/presentation/screens/candidate_home_screen.dart';
 import '../features/jobs/presentation/screens/job_detail_screen.dart';
 import '../features/jobs/presentation/screens/recruiter_home_screen.dart';
+import '../features/chat/presentation/screens/conversations_screen.dart';
+import '../features/chat/presentation/screens/chat_screen.dart';
 
 class AppRoutes {
   static const splash = '/';
@@ -17,6 +24,7 @@ class AppRoutes {
   static const jobDetail = '/jobs/detail';
   static const applicants = '/jobs/applicants';
   static const postJob = '/jobs/post';
+  static const chat = '/chat';
 }
 
 // Shell screen — holds the bottom nav bar.
@@ -148,16 +156,28 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
 
-      // Placeholder routes — wired in Phase 4 and 5
       GoRoute(
         path: AppRoutes.postJob,
-        builder: (_, __) =>
-            const Scaffold(body: Center(child: Text('Post Job — Phase 5'))),
+        builder: (_, state) {
+          //extra is null if creating a new job, or a String jobId if editing an existing job
+          final existingJob = state.extra as JobModel?;
+          return PostJobScreen(existingJob: existingJob);
+        },
       ),
       GoRoute(
         path: AppRoutes.applicants,
-        builder: (_, state) =>
-            Scaffold(body: Center(child: Text('Applicants — Phase 4'))),
+        builder: (_, state) {
+          final jobId = state.extra as String;
+          return ApplicantsScreen(jobId: jobId);
+        },
+      ),
+
+      GoRoute(
+        path: AppRoutes.chat,
+        builder: (_, state) {
+          final conversationId = state.extra as String;
+          return ChatScreen(conversationId: conversationId);
+        },
       ),
 
       // Candidate shell — bottom nav wraps all candidate tabs
@@ -170,19 +190,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/candidate/applications',
-            builder: (_, __) => const Scaffold(
-              body: Center(child: Text('Applications — Phase 4')),
-            ),
+            builder: (_, __) => const MyApplicationsScreen(),
           ),
           GoRoute(
             path: '/candidate/messages',
-            builder: (_, __) =>
-                const Scaffold(body: Center(child: Text('Messages — Phase 6'))),
+            builder: (_, __) => const ConversationsScreen(),
           ),
           GoRoute(
             path: '/candidate/profile',
-            builder: (_, __) =>
-                const Scaffold(body: Center(child: Text('Profile — Phase 5'))),
+            builder: (_, __) => const ProfileScreen(),
           ),
         ],
       ),
@@ -198,13 +214,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/recruiter/messages',
-            builder: (_, __) =>
-                const Scaffold(body: Center(child: Text('Messages — Phase 6'))),
+            builder: (_, __) => const ConversationsScreen(),
           ),
           GoRoute(
             path: '/recruiter/profile',
-            builder: (_, __) =>
-                const Scaffold(body: Center(child: Text('Profile — Phase 5'))),
+            builder: (_, __) => const ProfileScreen(),
           ),
         ],
       ),
