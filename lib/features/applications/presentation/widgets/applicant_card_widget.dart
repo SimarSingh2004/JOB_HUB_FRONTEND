@@ -74,7 +74,7 @@ class ApplicantCard extends StatelessWidget {
     final actions = _getActions(application.status);
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -160,13 +160,14 @@ class ApplicantCard extends StatelessWidget {
           ],
 
           if (application.status == 'shortlisted' ||
-              application.status == 'accepted')
+              application.status == 'accepted') ...[
+            const SizedBox(height: 12),
             Padding(
               padding: const EdgeInsets.only(right: 6),
               child: GestureDetector(
                 onTap: onMessage,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
                   decoration: BoxDecoration(
                     color: const Color(0xFFE6F1FB),
                     borderRadius: BorderRadius.circular(8),
@@ -184,6 +185,7 @@ class ApplicantCard extends StatelessWidget {
                 ),
               ),
             ),
+          ],
         ],
       ),
     );
