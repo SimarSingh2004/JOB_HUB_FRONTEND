@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../router/app_router.dart';
 import '../../../auth/presentation/viewmodels/auth_viewmodel.dart';
 import '../viewmodels/job_detail_viewmodel.dart';
+import '../viewmodels/post_job_viewmodel.dart';
 
 class JobDetailScreen extends ConsumerWidget {
   final String jobId;
@@ -114,8 +115,10 @@ class JobDetailScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 24),
 
-                  // Apply error
-                  if (detailState.applyError != null)
+                  // Apply error (candidate-only — these reflect the current
+                  // user's own apply attempt, never relevant to a recruiter
+                  // viewing their own posted job)
+                  if (isCandidate && detailState.applyError != null)
                     Container(
                       margin: const EdgeInsets.only(bottom: 16),
                       padding: const EdgeInsets.all(12),
@@ -130,7 +133,7 @@ class JobDetailScreen extends ConsumerWidget {
                     ),
 
                   // Apply success
-                  if (detailState.applySuccess)
+                  if (isCandidate && detailState.applySuccess)
                     Container(
                       margin: const EdgeInsets.only(bottom: 16),
                       padding: const EdgeInsets.all(12),
@@ -228,23 +231,106 @@ class JobDetailScreen extends ConsumerWidget {
                 alreadyApplied: detailState.applySuccess,
                 isActive: job.isActive,
               )
-            : SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: OutlinedButton.icon(
-                  onPressed: () =>
-                      context.push(AppRoutes.applicants, extra: jobId),
-                  icon: const Icon(Icons.people_outline),
-                  label: const Text('View Applicants'),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: const Color(0xFF4F46E5),
-                    side: const BorderSide(color: Color(0xFF4F46E5)),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: OutlinedButton.icon(
+                      onPressed: () =>
+                          context.push(AppRoutes.applicants, extra: jobId),
+                      icon: const Icon(Icons.people_outline),
+                      label: const Text('View Applicants'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFF4F46E5),
+                        side: const BorderSide(color: Color(0xFF4F46E5)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: _DeleteJobButton(jobId: jobId),
+                  ),
+                ],
               ),
+      ),
+    );
+  }
+}
+
+class _DeleteJobButton extends ConsumerWidget {
+  final String jobId;
+
+  const _DeleteJobButton({required this.jobId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isDeleting = ref.watch(
+      postJobViewModelProvider.select((s) => s.isDeleting),
+    );
+
+    return OutlinedButton.icon(
+      onPressed: isDeleting
+          ? null
+          : () async {
+              final confirm = await showDialog<bool>(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: const Text('Delete this job?'),
+                  content: const Text(
+                    'This will remove the job posting. Existing applicants and conversations are kept, but the job will no longer be visible or applicable to.',
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(ctx, false),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(ctx, true),
+                      child: const Text(
+                        'Delete',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+
+              if (confirm != true || !context.mounted) return;
+
+              final ok = await ref
+                  .read(postJobViewModelProvider.notifier)
+                  .deleteJob(jobId);
+
+              if (!context.mounted) return;
+
+              if (ok) {
+                context.pop();
+              } else {
+                final error = ref.read(postJobViewModelProvider).error;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(error ?? 'Failed to delete job')),
+                );
+              }
+            },
+      icon: isDeleting
+          ? const SizedBox(
+              width: 16,
+              height: 16,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            )
+          : const Icon(Icons.delete_outline),
+      label: Text(isDeleting ? 'Deleting...' : 'Delete Job'),
+      style: OutlinedButton.styleFrom(
+        foregroundColor: Colors.red.shade700,
+        side: BorderSide(color: Colors.red.shade200),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }

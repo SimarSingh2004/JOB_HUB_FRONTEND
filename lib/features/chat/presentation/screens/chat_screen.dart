@@ -9,8 +9,9 @@ import '../widgets/message_bubble.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   final String conversationId;
+  final String? title;
 
-  const ChatScreen({super.key, required this.conversationId});
+  const ChatScreen({super.key, required this.conversationId, this.title});
 
   @override
   ConsumerState<ChatScreen> createState() => _ChatScreenState();
@@ -78,9 +79,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF1F0F8),
       appBar: AppBar(
-        title: const Text(
-          'Chat',
-          style: TextStyle(fontWeight: FontWeight.w600),
+        title: Text(
+          widget.title ?? 'Chat',
+          style: const TextStyle(fontWeight: FontWeight.w600),
         ),
         backgroundColor: Colors.white,
         foregroundColor: const Color(0xFF1A1A2E),

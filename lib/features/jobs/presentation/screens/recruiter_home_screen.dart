@@ -65,7 +65,7 @@ class _RecruiterHomeScreenState extends ConsumerState<RecruiterHomeScreen> {
                       ],
                     ),
                   ),
-                  // Post new job FAB — Phase 5 will wire this up
+                  // Post new job FAB — Phase 5
                   FloatingActionButton.small(
                     onPressed: () => context.push(AppRoutes.postJob),
                     backgroundColor: const Color(0xFF4F46E5),

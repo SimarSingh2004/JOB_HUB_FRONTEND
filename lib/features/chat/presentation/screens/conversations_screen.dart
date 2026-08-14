@@ -135,10 +135,21 @@ class ConversationsScreen extends ConsumerWidget {
         itemCount: state.conversations.length,
         itemBuilder: (context, index) {
           final conversation = state.conversations[index];
+          final isCurrentUserCandidate =
+              conversation.candidateId.id == currentUserId;
+          final otherParty = isCurrentUserCandidate
+              ? conversation.recruiterId
+              : conversation.candidateId;
           return ConversationTile(
             conversation: conversation,
             currentUserId: currentUserId,
-            onTap: () => context.push(AppRoutes.chat, extra: conversation.id),
+            onTap: () => context.push(
+              AppRoutes.chat,
+              extra: {
+                'conversationId': conversation.id,
+                'title': otherParty.fullname,
+              },
+            ),
           );
         },
       ),

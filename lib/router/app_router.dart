@@ -175,8 +175,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.chat,
         builder: (_, state) {
-          final conversationId = state.extra as String;
-          return ChatScreen(conversationId: conversationId);
+          final extra = state.extra as Map<String, String>;
+          return ChatScreen(
+            conversationId: extra['conversationId']!,
+            title: extra['title'],
+          );
         },
       ),
 

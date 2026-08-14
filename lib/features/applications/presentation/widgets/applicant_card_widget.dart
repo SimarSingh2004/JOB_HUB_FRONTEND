@@ -74,7 +74,7 @@ class ApplicantCard extends StatelessWidget {
     final actions = _getActions(application.status);
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -147,7 +147,7 @@ class ApplicantCard extends StatelessWidget {
                 : Row(
                     children: [
                       for (int i = 0; i < actions.length; i++) ...[
-                        if (i > 0) const SizedBox(width: 10),
+                        if (i > 0) const SizedBox(width: 16),
                         Expanded(
                           child: _ActionButtonWidget(
                             action: actions[i],

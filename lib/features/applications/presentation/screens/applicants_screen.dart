@@ -158,7 +158,13 @@ class _ApplicantsScreenState extends ConsumerState<ApplicantsScreen> {
                   candidateId: application.candidateId,
                 );
                 if (context.mounted) {
-                  context.push(AppRoutes.chat, extra: conversation.id);
+                  context.push(
+                    AppRoutes.chat,
+                    extra: {
+                      'conversationId': conversation.id,
+                      'title': application.candidateDisplay,
+                    },
+                  );
                 }
               } catch (e) {
                 if (context.mounted) {

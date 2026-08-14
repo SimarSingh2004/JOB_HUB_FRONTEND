@@ -11,6 +11,7 @@ import '../../data/auth_repository.dart';
 import '../../../profile/presentation/viewmodels/profile_viewmodel.dart';
 import '../../../applications/presentation/viewmodels/my_applications_viewmodel.dart';
 import '../../../jobs/presentation/viewmodels/my_jobs_viewmodel.dart';
+import '../../../jobs/presentation/viewmodels/job_detail_viewmodel.dart';
 
 // AuthState holds everything the UI needs to know about the current user.
 
@@ -154,9 +155,15 @@ class AuthViewModel extends AsyncNotifier<AuthState> {
     // Always clear state regardless of API result
     state = const AsyncData(AuthState());
 
+    // Riverpod providers are cached across logins by default. Without this,
+    // a new user logging in right after someone else logs out inherits the
+    // previous user's ProfileState (including profileExists: true) — so
+    // save() calls updateProfile instead of createProfile, and the backend
+    // correctly says "Candidate/Recruiter profile not found".
     ref.invalidate(profileViewModelProvider);
     ref.invalidate(myApplicationsViewModelProvider);
     ref.invalidate(myJobsViewModelProvider);
+    ref.invalidate(jobDetailViewModelProvider);
   }
 
   void clearError() {
