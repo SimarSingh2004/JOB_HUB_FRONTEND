@@ -52,7 +52,7 @@ class ChatState {
   }
 }
 
-class ChatViewModel extends FamilyNotifier<ChatState, String> {
+class ChatViewModel extends AutoDisposeFamilyNotifier<ChatState, String> {
   // The polling timer — fires every 4 seconds
   Timer? _pollTimer;
 
@@ -207,4 +207,6 @@ class ChatViewModel extends FamilyNotifier<ChatState, String> {
 
 // Family provider — one ViewModel per conversationId
 final chatViewModelProvider =
-    NotifierProviderFamily<ChatViewModel, ChatState, String>(ChatViewModel.new);
+    AutoDisposeNotifierProviderFamily<ChatViewModel, ChatState, String>(
+      ChatViewModel.new,
+    );

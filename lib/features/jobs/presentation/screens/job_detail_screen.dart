@@ -27,12 +27,49 @@ class JobDetailScreen extends ConsumerWidget {
     }
 
     if (detailState.error != null) {
+      final isJobUnavailable = detailState.error!.toLowerCase().contains(
+        'job not found',
+      );
+
       return Scaffold(
         appBar: AppBar(),
-        body: Center(child: Text(detailState.error!)),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.work_off_outlined,
+                  size: 56,
+                  color: Colors.grey.shade500,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  isJobUnavailable
+                      ? 'Job no longer available'
+                      : detailState.error!,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF1A1A2E),
+                  ),
+                ),
+                if (isJobUnavailable) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    'This job posting has been closed or removed.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
       );
     }
-
     final job = detailState.job!;
 
     return Scaffold(

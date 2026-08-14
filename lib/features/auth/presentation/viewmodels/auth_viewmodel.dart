@@ -12,6 +12,9 @@ import '../../../profile/presentation/viewmodels/profile_viewmodel.dart';
 import '../../../applications/presentation/viewmodels/my_applications_viewmodel.dart';
 import '../../../jobs/presentation/viewmodels/my_jobs_viewmodel.dart';
 import '../../../jobs/presentation/viewmodels/job_detail_viewmodel.dart';
+import '../../../chat/presentation/viewmodels/conversations_viewmodel.dart';
+import '../../../chat/presentation/viewmodels/chat_viewmodel.dart';
+import '../../../jobs/presentation/viewmodels/jobs_viewmodel.dart';
 
 // AuthState holds everything the UI needs to know about the current user.
 
@@ -164,6 +167,9 @@ class AuthViewModel extends AsyncNotifier<AuthState> {
     ref.invalidate(myApplicationsViewModelProvider);
     ref.invalidate(myJobsViewModelProvider);
     ref.invalidate(jobDetailViewModelProvider);
+    ref.invalidate(conversationsViewModelProvider);
+    ref.invalidate(chatViewModelProvider);
+    ref.invalidate(jobsViewModelProvider);
   }
 
   void clearError() {

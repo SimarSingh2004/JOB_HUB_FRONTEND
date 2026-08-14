@@ -32,7 +32,7 @@ class ConversationsState {
   }
 }
 
-class ConversationsViewModel extends Notifier<ConversationsState> {
+class ConversationsViewModel extends AutoDisposeNotifier<ConversationsState> {
   @override
   ConversationsState build() {
     Future.microtask(() => fetch());
@@ -81,6 +81,6 @@ final chatRepositoryProvider = Provider<ChatRepository>((ref) {
 });
 
 final conversationsViewModelProvider =
-    NotifierProvider<ConversationsViewModel, ConversationsState>(
+    AutoDisposeNotifierProvider<ConversationsViewModel, ConversationsState>(
       ConversationsViewModel.new,
     );
