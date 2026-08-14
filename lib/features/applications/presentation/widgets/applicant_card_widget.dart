@@ -145,19 +145,17 @@ class ApplicantCard extends StatelessWidget {
                     ),
                   )
                 : Row(
-                    children: actions
-                        .map(
-                          (action) => Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 6),
-                              child: _ActionButtonWidget(
-                                action: action,
-                                onTap: () => onStatusUpdate(action.status),
-                              ),
-                            ),
+                    children: [
+                      for (int i = 0; i < actions.length; i++) ...[
+                        if (i > 0) const SizedBox(width: 10),
+                        Expanded(
+                          child: _ActionButtonWidget(
+                            action: actions[i],
+                            onTap: () => onStatusUpdate(actions[i].status),
                           ),
-                        )
-                        .toList(),
+                        ),
+                      ],
+                    ],
                   ),
           ],
 

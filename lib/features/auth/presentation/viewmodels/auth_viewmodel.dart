@@ -8,6 +8,9 @@ import '../../../../core/storage/secure_storage.dart';
 import '../../../../models/user.dart';
 import '../../data/auth_remote_datasource.dart';
 import '../../data/auth_repository.dart';
+import '../../../profile/presentation/viewmodels/profile_viewmodel.dart';
+import '../../../applications/presentation/viewmodels/my_applications_viewmodel.dart';
+import '../../../jobs/presentation/viewmodels/my_jobs_viewmodel.dart';
 
 // AuthState holds everything the UI needs to know about the current user.
 
@@ -150,6 +153,10 @@ class AuthViewModel extends AsyncNotifier<AuthState> {
 
     // Always clear state regardless of API result
     state = const AsyncData(AuthState());
+
+    ref.invalidate(profileViewModelProvider);
+    ref.invalidate(myApplicationsViewModelProvider);
+    ref.invalidate(myJobsViewModelProvider);
   }
 
   void clearError() {

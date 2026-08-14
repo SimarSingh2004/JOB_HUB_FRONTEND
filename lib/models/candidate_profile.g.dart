@@ -61,7 +61,7 @@ _$CandidateProfileModelImpl _$$CandidateProfileModelImplFromJson(
   Map<String, dynamic> json,
 ) => _$CandidateProfileModelImpl(
   id: json['_id'] as String,
-  userId: json['userId'] as String,
+  userId: _userIdFromJson(json['userId']),
   bio: json['bio'] as String? ?? '',
   skills:
       (json['skills'] as List<dynamic>?)?.map((e) => e as String).toList() ??

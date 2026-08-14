@@ -12,7 +12,7 @@ _$JobModelImpl _$$JobModelImplFromJson(Map<String, dynamic> json) =>
     _$JobModelImpl(
       id: json['_id'] as String,
       title: json['title'] as String,
-      description: json['description'] as String,
+      description: json['description'] as String? ?? '',
       skillsRequired:
           (json['skillsRequired'] as List<dynamic>?)
               ?.map((e) => e as String)
@@ -20,9 +20,10 @@ _$JobModelImpl _$$JobModelImplFromJson(Map<String, dynamic> json) =>
           const [],
       salary: (json['salary'] as num?)?.toDouble(),
       location: json['location'] as String?,
-      recruiter: UserModel.fromJson(json['recruiter'] as Map<String, dynamic>),
+      recruiter: _recruiterFromJson(json['recruiter']),
       isActive: json['isActive'] as bool? ?? true,
       createdAt: json['createdAt'] as String?,
+      hasApplied: json['hasApplied'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$JobModelImplToJson(_$JobModelImpl instance) =>
@@ -36,4 +37,5 @@ Map<String, dynamic> _$$JobModelImplToJson(_$JobModelImpl instance) =>
       'recruiter': instance.recruiter,
       'isActive': instance.isActive,
       'createdAt': instance.createdAt,
+      'hasApplied': instance.hasApplied,
     };

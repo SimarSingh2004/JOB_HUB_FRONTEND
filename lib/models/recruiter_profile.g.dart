@@ -12,7 +12,7 @@ _$RecruiterProfileModelImpl _$$RecruiterProfileModelImplFromJson(
   Map<String, dynamic> json,
 ) => _$RecruiterProfileModelImpl(
   id: json['_id'] as String,
-  userId: json['userId'] as String,
+  userId: _userIdFromJson(json['userId']),
   companyName: json['companyName'] as String,
   companyDescription: json['companyDescription'] as String,
   companyWebsite: json['companyWebsite'] as String? ?? '',

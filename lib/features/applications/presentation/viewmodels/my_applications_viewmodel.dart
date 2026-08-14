@@ -89,6 +89,12 @@ class MyApplicationsViewModel extends Notifier<MyApplicationsState> {
         isLoadingMore: false,
         error: e.message,
       );
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        isLoadingMore: false,
+        error: e.toString(),
+      );
     }
   }
 }

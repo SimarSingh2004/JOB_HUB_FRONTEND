@@ -4,6 +4,7 @@ import '../../../../models/job.dart';
 // ignore: unused_import
 import '../../data/jobs_repository.dart';
 import 'jobs_viewmodel.dart';
+import '../../../applications/presentation/viewmodels/my_applications_viewmodel.dart';
 
 class JobDetailState {
   final JobModel? job;
@@ -57,7 +58,11 @@ class JobDetailViewModel extends FamilyNotifier<JobDetailState, String> {
     final repo = ref.read(jobsRepositoryProvider);
     try {
       final job = await repo.getJobById(jobId);
-      state = state.copyWith(job: job, isLoading: false);
+      state = state.copyWith(
+        job: job,
+        isLoading: false,
+        applySuccess: job.hasApplied,
+      );
     } on AppException catch (e) {
       state = state.copyWith(isLoading: false, error: e.message);
     }
@@ -72,6 +77,8 @@ class JobDetailViewModel extends FamilyNotifier<JobDetailState, String> {
     try {
       await repo.applyToJob(state.job!.id);
       state = state.copyWith(isApplying: false, applySuccess: true);
+      // Refresh my applications list after applying
+      ref.invalidate(myApplicationsViewModelProvider);
     } on AppException catch (e) {
       state = state.copyWith(isApplying: false, applyError: e.message);
     }

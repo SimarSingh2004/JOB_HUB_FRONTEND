@@ -3,6 +3,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'candidate_profile.freezed.dart';
 part 'candidate_profile.g.dart';
 
+String _userIdFromJson(dynamic json) {
+  if (json is Map<String, dynamic>) return json['_id']?.toString() ?? '';
+  return json?.toString() ?? '';
+}
+
 @Freezed()
 class EducationModel with _$EducationModel {
   const factory EducationModel({
@@ -45,7 +50,7 @@ class ProjectModel with _$ProjectModel {
 class CandidateProfileModel with _$CandidateProfileModel {
   const factory CandidateProfileModel({
     @JsonKey(name: '_id') required String id,
-    required String userId,
+    @JsonKey(fromJson: _userIdFromJson) required String userId,
     @Default('') String bio,
     @Default([]) List<String> skills,
     @Default('') String resume,

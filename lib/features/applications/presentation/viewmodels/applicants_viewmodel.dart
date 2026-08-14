@@ -147,6 +147,12 @@ class ApplicantsViewModel extends FamilyNotifier<ApplicantsState, String> {
         isLoadingMore: false,
         error: e.message,
       );
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        isLoadingMore: false,
+        error: e.toString(),
+      );
     }
   }
 }

@@ -27,12 +27,12 @@ mixin _$JobModel {
   String get description => throw _privateConstructorUsedError;
   List<String> get skillsRequired => throw _privateConstructorUsedError;
   double? get salary => throw _privateConstructorUsedError;
-  String? get location =>
-      throw _privateConstructorUsedError; // recruiter can be a full UserModel (when populated) or just an id string
-  // We'll handle population carefully — for now store as UserModel
+  String? get location => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _recruiterFromJson)
   UserModel get recruiter => throw _privateConstructorUsedError;
   bool get isActive => throw _privateConstructorUsedError;
   String? get createdAt => throw _privateConstructorUsedError;
+  bool get hasApplied => throw _privateConstructorUsedError;
 
   /// Serializes this JobModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -56,9 +56,10 @@ abstract class $JobModelCopyWith<$Res> {
     List<String> skillsRequired,
     double? salary,
     String? location,
-    UserModel recruiter,
+    @JsonKey(fromJson: _recruiterFromJson) UserModel recruiter,
     bool isActive,
     String? createdAt,
+    bool hasApplied,
   });
 }
 
@@ -86,6 +87,7 @@ class _$JobModelCopyWithImpl<$Res, $Val extends JobModel>
     Object? recruiter = null,
     Object? isActive = null,
     Object? createdAt = freezed,
+    Object? hasApplied = null,
   }) {
     return _then(
       _value.copyWith(
@@ -125,6 +127,10 @@ class _$JobModelCopyWithImpl<$Res, $Val extends JobModel>
                 ? _value.createdAt
                 : createdAt // ignore: cast_nullable_to_non_nullable
                       as String?,
+            hasApplied: null == hasApplied
+                ? _value.hasApplied
+                : hasApplied // ignore: cast_nullable_to_non_nullable
+                      as bool,
           )
           as $Val,
     );
@@ -147,9 +153,10 @@ abstract class _$$JobModelImplCopyWith<$Res>
     List<String> skillsRequired,
     double? salary,
     String? location,
-    UserModel recruiter,
+    @JsonKey(fromJson: _recruiterFromJson) UserModel recruiter,
     bool isActive,
     String? createdAt,
+    bool hasApplied,
   });
 }
 
@@ -176,6 +183,7 @@ class __$$JobModelImplCopyWithImpl<$Res>
     Object? recruiter = null,
     Object? isActive = null,
     Object? createdAt = freezed,
+    Object? hasApplied = null,
   }) {
     return _then(
       _$JobModelImpl(
@@ -215,6 +223,10 @@ class __$$JobModelImplCopyWithImpl<$Res>
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
                   as String?,
+        hasApplied: null == hasApplied
+            ? _value.hasApplied
+            : hasApplied // ignore: cast_nullable_to_non_nullable
+                  as bool,
       ),
     );
   }
@@ -226,13 +238,14 @@ class _$JobModelImpl implements _JobModel {
   const _$JobModelImpl({
     @JsonKey(name: '_id') required this.id,
     required this.title,
-    required this.description,
+    this.description = '',
     final List<String> skillsRequired = const [],
     this.salary,
     this.location,
-    required this.recruiter,
+    @JsonKey(fromJson: _recruiterFromJson) required this.recruiter,
     this.isActive = true,
     this.createdAt,
+    this.hasApplied = false,
   }) : _skillsRequired = skillsRequired;
 
   factory _$JobModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -244,6 +257,7 @@ class _$JobModelImpl implements _JobModel {
   @override
   final String title;
   @override
+  @JsonKey()
   final String description;
   final List<String> _skillsRequired;
   @override
@@ -258,19 +272,21 @@ class _$JobModelImpl implements _JobModel {
   final double? salary;
   @override
   final String? location;
-  // recruiter can be a full UserModel (when populated) or just an id string
-  // We'll handle population carefully — for now store as UserModel
   @override
+  @JsonKey(fromJson: _recruiterFromJson)
   final UserModel recruiter;
   @override
   @JsonKey()
   final bool isActive;
   @override
   final String? createdAt;
+  @override
+  @JsonKey()
+  final bool hasApplied;
 
   @override
   String toString() {
-    return 'JobModel(id: $id, title: $title, description: $description, skillsRequired: $skillsRequired, salary: $salary, location: $location, recruiter: $recruiter, isActive: $isActive, createdAt: $createdAt)';
+    return 'JobModel(id: $id, title: $title, description: $description, skillsRequired: $skillsRequired, salary: $salary, location: $location, recruiter: $recruiter, isActive: $isActive, createdAt: $createdAt, hasApplied: $hasApplied)';
   }
 
   @override
@@ -294,7 +310,9 @@ class _$JobModelImpl implements _JobModel {
             (identical(other.isActive, isActive) ||
                 other.isActive == isActive) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.hasApplied, hasApplied) ||
+                other.hasApplied == hasApplied));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -310,6 +328,7 @@ class _$JobModelImpl implements _JobModel {
     recruiter,
     isActive,
     createdAt,
+    hasApplied,
   );
 
   /// Create a copy of JobModel
@@ -330,13 +349,14 @@ abstract class _JobModel implements JobModel {
   const factory _JobModel({
     @JsonKey(name: '_id') required final String id,
     required final String title,
-    required final String description,
+    final String description,
     final List<String> skillsRequired,
     final double? salary,
     final String? location,
-    required final UserModel recruiter,
+    @JsonKey(fromJson: _recruiterFromJson) required final UserModel recruiter,
     final bool isActive,
     final String? createdAt,
+    final bool hasApplied,
   }) = _$JobModelImpl;
 
   factory _JobModel.fromJson(Map<String, dynamic> json) =
@@ -354,14 +374,16 @@ abstract class _JobModel implements JobModel {
   @override
   double? get salary;
   @override
-  String? get location; // recruiter can be a full UserModel (when populated) or just an id string
-  // We'll handle population carefully — for now store as UserModel
+  String? get location;
   @override
+  @JsonKey(fromJson: _recruiterFromJson)
   UserModel get recruiter;
   @override
   bool get isActive;
   @override
   String? get createdAt;
+  @override
+  bool get hasApplied;
 
   /// Create a copy of JobModel
   /// with the given fields replaced by the non-null parameter values.

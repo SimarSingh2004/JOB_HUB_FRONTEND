@@ -25,6 +25,7 @@ RecruiterProfileModel _$RecruiterProfileModelFromJson(
 mixin _$RecruiterProfileModel {
   @JsonKey(name: '_id')
   String get id => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _userIdFromJson)
   String get userId => throw _privateConstructorUsedError;
   String get companyName => throw _privateConstructorUsedError;
   String get companyDescription => throw _privateConstructorUsedError;
@@ -50,7 +51,7 @@ abstract class $RecruiterProfileModelCopyWith<$Res> {
   @useResult
   $Res call({
     @JsonKey(name: '_id') String id,
-    String userId,
+    @JsonKey(fromJson: _userIdFromJson) String userId,
     String companyName,
     String companyDescription,
     String companyWebsite,
@@ -126,7 +127,7 @@ abstract class _$$RecruiterProfileModelImplCopyWith<$Res>
   @useResult
   $Res call({
     @JsonKey(name: '_id') String id,
-    String userId,
+    @JsonKey(fromJson: _userIdFromJson) String userId,
     String companyName,
     String companyDescription,
     String companyWebsite,
@@ -192,7 +193,7 @@ class __$$RecruiterProfileModelImplCopyWithImpl<$Res>
 class _$RecruiterProfileModelImpl implements _RecruiterProfileModel {
   const _$RecruiterProfileModelImpl({
     @JsonKey(name: '_id') required this.id,
-    required this.userId,
+    @JsonKey(fromJson: _userIdFromJson) required this.userId,
     required this.companyName,
     required this.companyDescription,
     this.companyWebsite = '',
@@ -206,6 +207,7 @@ class _$RecruiterProfileModelImpl implements _RecruiterProfileModel {
   @JsonKey(name: '_id')
   final String id;
   @override
+  @JsonKey(fromJson: _userIdFromJson)
   final String userId;
   @override
   final String companyName;
@@ -273,7 +275,7 @@ class _$RecruiterProfileModelImpl implements _RecruiterProfileModel {
 abstract class _RecruiterProfileModel implements RecruiterProfileModel {
   const factory _RecruiterProfileModel({
     @JsonKey(name: '_id') required final String id,
-    required final String userId,
+    @JsonKey(fromJson: _userIdFromJson) required final String userId,
     required final String companyName,
     required final String companyDescription,
     final String companyWebsite,
@@ -287,6 +289,7 @@ abstract class _RecruiterProfileModel implements RecruiterProfileModel {
   @JsonKey(name: '_id')
   String get id;
   @override
+  @JsonKey(fromJson: _userIdFromJson)
   String get userId;
   @override
   String get companyName;

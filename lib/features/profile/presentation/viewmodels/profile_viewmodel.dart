@@ -19,6 +19,9 @@ class ProfileState {
   final bool isLoading;
   final bool isSaving; // separate flag for save button spinner
   final bool profileExists; // false = show create form, true = show edit
+  final bool loadFailed; // true = a real error occurred loading the profile
+  // (NOT the same as profileExists:false / 404 —
+  // this must NOT fall through to the create form)
   final String? error;
   final String? saveError;
   final bool saveSuccess;
@@ -29,6 +32,7 @@ class ProfileState {
     this.isLoading = true,
     this.isSaving = false,
     this.profileExists = false,
+    this.loadFailed = false,
     this.error,
     this.saveError,
     this.saveSuccess = false,
@@ -44,6 +48,7 @@ class ProfileState {
     bool? isLoading,
     bool? isSaving,
     bool? profileExists,
+    bool? loadFailed,
     String? error,
     String? saveError,
     bool? saveSuccess,
@@ -56,6 +61,7 @@ class ProfileState {
       isLoading: isLoading ?? this.isLoading,
       isSaving: isSaving ?? this.isSaving,
       profileExists: profileExists ?? this.profileExists,
+      loadFailed: loadFailed ?? this.loadFailed,
       error: clearError ? null : error ?? this.error,
       saveError: clearSaveError ? null : saveError ?? this.saveError,
       saveSuccess: saveSuccess ?? this.saveSuccess,
@@ -94,7 +100,10 @@ class ProfileViewModel extends AsyncNotifier<ProfileState> {
       if (e.statusCode == 404) {
         return const ProfileState(isLoading: false, profileExists: false);
       }
-      return ProfileState(isLoading: false, error: e.message);
+      // Any other error (401, 500, network, etc.) is a real failure —
+      // must NOT be treated the same as "no profile yet", or the app
+      // silently loops you back into the create form every time.
+      return ProfileState(isLoading: false, loadFailed: true, error: e.message);
     }
   }
 

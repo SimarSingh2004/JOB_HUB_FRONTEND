@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../router/app_router.dart';
 import '../../../auth/presentation/viewmodels/auth_viewmodel.dart';
 import '../viewmodels/profile_viewmodel.dart';
 import '../widgets/candidate_profile_form.dart';
@@ -77,6 +79,11 @@ class ProfileScreen extends ConsumerWidget {
                       );
                       if (confirm == true && context.mounted) {
                         await ref.read(authViewModelProvider.notifier).logout();
+                        // GoRouter has no redirect/refreshListenable wired to
+                        // auth state, so it never re-routes on its own —
+                        // navigate explicitly or the user is left stranded
+                        // on this (now-invalid) screen after logout.
+                        if (context.mounted) context.go(AppRoutes.login);
                       }
                     },
                     icon: const Icon(Icons.logout, size: 18),
@@ -99,6 +106,27 @@ class ProfileScreen extends ConsumerWidget {
                 data: (profileState) {
                   if (profileState.isLoading) {
                     return const Center(child: CircularProgressIndicator());
+                  }
+
+                  // A real error (401/500/network) — NOT the same as "no
+                  // profile yet". Must be checked before profileExists,
+                  // or this silently shows the create form instead,
+                  // which is why "Create Profile" kept reappearing.
+                  if (profileState.loadFailed) {
+                    return Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(profileState.error ?? 'Failed to load profile'),
+                          const SizedBox(height: 12),
+                          ElevatedButton(
+                            onPressed: () =>
+                                ref.invalidate(profileViewModelProvider),
+                            child: const Text('Retry'),
+                          ),
+                        ],
+                      ),
+                    );
                   }
 
                   // Profile doesn't exist yet — show create form

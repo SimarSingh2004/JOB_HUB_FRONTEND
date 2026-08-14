@@ -678,6 +678,7 @@ CandidateProfileModel _$CandidateProfileModelFromJson(
 mixin _$CandidateProfileModel {
   @JsonKey(name: '_id')
   String get id => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _userIdFromJson)
   String get userId => throw _privateConstructorUsedError;
   String get bio => throw _privateConstructorUsedError;
   List<String> get skills => throw _privateConstructorUsedError;
@@ -705,7 +706,7 @@ abstract class $CandidateProfileModelCopyWith<$Res> {
   @useResult
   $Res call({
     @JsonKey(name: '_id') String id,
-    String userId,
+    @JsonKey(fromJson: _userIdFromJson) String userId,
     String bio,
     List<String> skills,
     String resume,
@@ -793,7 +794,7 @@ abstract class _$$CandidateProfileModelImplCopyWith<$Res>
   @useResult
   $Res call({
     @JsonKey(name: '_id') String id,
-    String userId,
+    @JsonKey(fromJson: _userIdFromJson) String userId,
     String bio,
     List<String> skills,
     String resume,
@@ -871,7 +872,7 @@ class __$$CandidateProfileModelImplCopyWithImpl<$Res>
 class _$CandidateProfileModelImpl implements _CandidateProfileModel {
   const _$CandidateProfileModelImpl({
     @JsonKey(name: '_id') required this.id,
-    required this.userId,
+    @JsonKey(fromJson: _userIdFromJson) required this.userId,
     this.bio = '',
     final List<String> skills = const [],
     this.resume = '',
@@ -890,6 +891,7 @@ class _$CandidateProfileModelImpl implements _CandidateProfileModel {
   @JsonKey(name: '_id')
   final String id;
   @override
+  @JsonKey(fromJson: _userIdFromJson)
   final String userId;
   @override
   @JsonKey()
@@ -994,7 +996,7 @@ class _$CandidateProfileModelImpl implements _CandidateProfileModel {
 abstract class _CandidateProfileModel implements CandidateProfileModel {
   const factory _CandidateProfileModel({
     @JsonKey(name: '_id') required final String id,
-    required final String userId,
+    @JsonKey(fromJson: _userIdFromJson) required final String userId,
     final String bio,
     final List<String> skills,
     final String resume,
@@ -1010,6 +1012,7 @@ abstract class _CandidateProfileModel implements CandidateProfileModel {
   @JsonKey(name: '_id')
   String get id;
   @override
+  @JsonKey(fromJson: _userIdFromJson)
   String get userId;
   @override
   String get bio;

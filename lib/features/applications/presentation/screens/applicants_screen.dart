@@ -155,7 +155,7 @@ class _ApplicantsScreenState extends ConsumerState<ApplicantsScreen> {
               try {
                 final conversation = await repo.createOrGetConversation(
                   jobId: widget.jobId,
-                  candidateId: application.candidate,
+                  candidateId: application.candidateId,
                 );
                 if (context.mounted) {
                   context.push(AppRoutes.chat, extra: conversation.id);

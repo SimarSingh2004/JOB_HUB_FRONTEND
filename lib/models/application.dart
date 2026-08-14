@@ -35,4 +35,15 @@ extension ApplicationModelX on ApplicationModel {
   }
 
   String get candidate => candidateDisplay;
+
+  // The actual candidate ObjectId — needed anywhere an API call expects an
+  // id (e.g. starting a chat). Do NOT confuse with `candidate` above, which
+  // is a display name only.
+  String get candidateId {
+    if (candidateRaw is Map) {
+      final map = candidateRaw as Map<String, dynamic>;
+      return map['_id'] as String? ?? '';
+    }
+    return candidateRaw.toString();
+  }
 }
