@@ -103,6 +103,8 @@ class ChatViewModel extends FamilyNotifier<ChatState, String> {
       );
     } on AppException catch (e) {
       state = state.copyWith(isLoading: false, error: e.message);
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 
@@ -165,6 +167,8 @@ class ChatViewModel extends FamilyNotifier<ChatState, String> {
       );
     } on AppException catch (e) {
       state = state.copyWith(isLoadingMore: false, sendError: e.message);
+    } catch (e) {
+      state = state.copyWith(isLoadingMore: false, sendError: e.toString());
     }
   }
 
@@ -191,6 +195,8 @@ class ChatViewModel extends FamilyNotifier<ChatState, String> {
       );
     } on AppException catch (e) {
       state = state.copyWith(isSending: false, sendError: e.message);
+    } catch (e) {
+      state = state.copyWith(isSending: false, sendError: e.toString());
     }
   }
 

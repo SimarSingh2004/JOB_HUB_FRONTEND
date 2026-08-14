@@ -67,6 +67,8 @@ class PostJobViewModel extends Notifier<PostJobState> {
       state = state.copyWith(isSaving: false, success: true, savedJob: job);
     } on AppException catch (e) {
       state = state.copyWith(isSaving: false, error: e.message);
+    } catch (e) {
+      state = state.copyWith(isSaving: false, error: e.toString());
     }
   }
 
@@ -106,6 +108,9 @@ class PostJobViewModel extends Notifier<PostJobState> {
       return true;
     } on AppException catch (e) {
       state = state.copyWith(isDeleting: false, error: e.message);
+      return false;
+    } catch (e) {
+      state = state.copyWith(isDeleting: false, error: e.toString());
       return false;
     }
   }

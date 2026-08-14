@@ -1,6 +1,11 @@
 class ApiConstants {
-  static const String baseUrl = 'http://10.0.2.2:8000/api/v1';
-
+  // Set at build time with --dart-define=API_BASE_URL=https://your-backend.example.com/api/v1
+  // Falls back to the Android-emulator loopback address (10.0.2.2) for local dev,
+  // since that's the only environment where this default is ever correct.
+  static const String baseUrl = String.fromEnvironment(
+    'API_BASE_URL',
+    defaultValue: 'http://10.0.2.2:8000/api/v1',
+  );
   //Auth
   static const String register = '/auth/register';
   static const String login = '/auth/login';

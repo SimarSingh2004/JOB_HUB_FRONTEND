@@ -48,6 +48,11 @@ class ConversationsViewModel extends Notifier<ConversationsState> {
       state = state.copyWith(conversations: conversations, isLoading: false);
     } on AppException catch (e) {
       state = state.copyWith(isLoading: false, error: e.message);
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: 'An unexpected error occurred',
+      );
     }
   }
 

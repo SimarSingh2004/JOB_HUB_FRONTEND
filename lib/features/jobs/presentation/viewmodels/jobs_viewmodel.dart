@@ -152,6 +152,12 @@ class JobsViewModel extends Notifier<JobsState> {
         isLoadingMore: false,
         error: e.message,
       );
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        isLoadingMore: false,
+        error: e.toString(),
+      );
     }
   }
 }

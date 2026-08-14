@@ -104,6 +104,12 @@ class ProfileViewModel extends AsyncNotifier<ProfileState> {
       // must NOT be treated the same as "no profile yet", or the app
       // silently loops you back into the create form every time.
       return ProfileState(isLoading: false, loadFailed: true, error: e.message);
+    } catch (e) {
+      return ProfileState(
+        isLoading: false,
+        loadFailed: true,
+        error: e.toString(),
+      );
     }
   }
 
@@ -129,6 +135,10 @@ class ProfileViewModel extends AsyncNotifier<ProfileState> {
       state = AsyncData(
         current.copyWith(isSaving: false, saveError: e.message),
       );
+    } catch (e) {
+      state = AsyncData(
+        current.copyWith(isSaving: false, saveError: e.toString()),
+      );
     }
   }
 
@@ -153,6 +163,10 @@ class ProfileViewModel extends AsyncNotifier<ProfileState> {
     } on AppException catch (e) {
       state = AsyncData(
         current.copyWith(isSaving: false, saveError: e.message),
+      );
+    } catch (e) {
+      state = AsyncData(
+        current.copyWith(isSaving: false, saveError: e.toString()),
       );
     }
   }
@@ -189,6 +203,10 @@ class ProfileViewModel extends AsyncNotifier<ProfileState> {
     } on AppException catch (e) {
       state = AsyncData(
         current.copyWith(isSaving: false, saveError: e.message),
+      );
+    } catch (e) {
+      state = AsyncData(
+        current.copyWith(isSaving: false, saveError: e.toString()),
       );
     }
   }
