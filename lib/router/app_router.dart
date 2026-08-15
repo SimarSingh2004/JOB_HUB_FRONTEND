@@ -140,7 +140,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: AppRoutes.splash,
     routes: [
-      GoRoute(path: AppRoutes.splash, builder: (_, __) => const SplashScreen()),
+      GoRoute(path: AppRoutes.splash, builder: (_, __) => SplashScreen()),
       GoRoute(path: AppRoutes.login, builder: (_, __) => const LoginScreen()),
       GoRoute(
         path: AppRoutes.register,

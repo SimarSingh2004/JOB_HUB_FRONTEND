@@ -13,7 +13,7 @@ class JobHubApp extends ConsumerWidget {
       title: 'JobHub',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF4F46E5)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF5B3CC4)),
         useMaterial3: true,
       ),
       routerConfig: router,

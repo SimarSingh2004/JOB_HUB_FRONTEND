@@ -41,7 +41,9 @@ dependencies:
 
 dev_dependencies:
   build_runner: ^2.4.9
+  flutter_launcher_icons: ^0.14.4
   flutter_lints: ^5.0.0
+  flutter_native_splash: ^2.4.7
   flutter_test:
     sdk: flutter
   freezed: ^2.5.2
@@ -84,3 +86,24 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/branding/jobhub_launcher_icon.png"
+
+  adaptive_icon_background: "#5B3CC4"
+  adaptive_icon_foreground: "assets/branding/jobhub_adaptive_foreground.png"
+
+  min_sdk_android: 21
+
+flutter_native_splash:
+  color: "#FAF9FF"
+  image: assets/branding/jobhub_icon_light.png
+
+  android: true
+  ios: true
+
+  android_12:
+    color: "#FAF9FF"
+    image: assets/branding/jobhub_icon_light.png

@@ -79,10 +79,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Header
-                  const Icon(
-                    Icons.work_rounded,
-                    size: 48,
-                    color: Color(0xFF4F46E5),
+                  Image.asset(
+                    'assets/branding/jobhub_icon_light.png',
+                    width: 90,
                   ),
                   const SizedBox(height: 16),
                   const Text(
