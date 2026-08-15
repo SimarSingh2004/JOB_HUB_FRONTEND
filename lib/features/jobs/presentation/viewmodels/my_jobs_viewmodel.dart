@@ -42,7 +42,7 @@ class MyJobsState {
   }
 }
 
-class MyJobsViewModel extends Notifier<MyJobsState> {
+class MyJobsViewModel extends AutoDisposeNotifier<MyJobsState> {
   @override
   MyJobsState build() {
     Future.microtask(() => _fetchFirstPage());
@@ -90,6 +90,7 @@ class MyJobsViewModel extends Notifier<MyJobsState> {
   }
 }
 
-final myJobsViewModelProvider = NotifierProvider<MyJobsViewModel, MyJobsState>(
-  MyJobsViewModel.new,
-);
+final myJobsViewModelProvider =
+    NotifierProvider.autoDispose<MyJobsViewModel, MyJobsState>(
+      MyJobsViewModel.new,
+    );

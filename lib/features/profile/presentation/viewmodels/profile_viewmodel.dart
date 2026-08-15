@@ -69,7 +69,7 @@ class ProfileState {
   }
 }
 
-class ProfileViewModel extends AsyncNotifier<ProfileState> {
+class ProfileViewModel extends AutoDisposeAsyncNotifier<ProfileState> {
   @override
   Future<ProfileState> build() async {
     return _loadProfile();
@@ -255,4 +255,6 @@ final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
 });
 
 final profileViewModelProvider =
-    AsyncNotifierProvider<ProfileViewModel, ProfileState>(ProfileViewModel.new);
+    AsyncNotifierProvider.autoDispose<ProfileViewModel, ProfileState>(
+      ProfileViewModel.new,
+    );

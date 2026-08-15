@@ -44,7 +44,7 @@ class MyApplicationsState {
   }
 }
 
-class MyApplicationsViewModel extends Notifier<MyApplicationsState> {
+class MyApplicationsViewModel extends AutoDisposeNotifier<MyApplicationsState> {
   @override
   MyApplicationsState build() {
     Future.microtask(() => _fetchFirstPage());
@@ -113,6 +113,6 @@ final applicationsRepositoryProvider = Provider<ApplicationsRepository>((ref) {
 });
 
 final myApplicationsViewModelProvider =
-    NotifierProvider<MyApplicationsViewModel, MyApplicationsState>(
+    NotifierProvider.autoDispose<MyApplicationsViewModel, MyApplicationsState>(
       MyApplicationsViewModel.new,
     );

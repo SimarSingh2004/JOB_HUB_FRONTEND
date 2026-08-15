@@ -42,7 +42,8 @@ class JobDetailState {
   }
 }
 
-class JobDetailViewModel extends FamilyNotifier<JobDetailState, String> {
+class JobDetailViewModel
+    extends AutoDisposeFamilyNotifier<JobDetailState, String> {
   // FamilyNotifier takes a parameter — here it's the jobId.
   // This lets us create one ViewModel instance per job,
   // identified by its ID. Like a parameterized provider.
@@ -88,7 +89,5 @@ class JobDetailViewModel extends FamilyNotifier<JobDetailState, String> {
 
 // Family provider — takes a jobId argument
 // Usage: ref.watch(jobDetailViewModelProvider('someJobId'))
-final jobDetailViewModelProvider =
-    NotifierProviderFamily<JobDetailViewModel, JobDetailState, String>(
-      JobDetailViewModel.new,
-    );
+final jobDetailViewModelProvider = NotifierProvider.autoDispose
+    .family<JobDetailViewModel, JobDetailState, String>(JobDetailViewModel.new);

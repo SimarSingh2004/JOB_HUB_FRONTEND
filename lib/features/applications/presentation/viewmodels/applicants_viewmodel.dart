@@ -51,7 +51,8 @@ class ApplicantsState {
   }
 }
 
-class ApplicantsViewModel extends FamilyNotifier<ApplicantsState, String> {
+class ApplicantsViewModel
+    extends AutoDisposeFamilyNotifier<ApplicantsState, String> {
   // FamilyNotifier — jobId is the parameter
   // One ViewModel instance per job's applicants list
 
@@ -157,7 +158,7 @@ class ApplicantsViewModel extends FamilyNotifier<ApplicantsState, String> {
   }
 }
 
-final applicantsViewModelProvider =
-    NotifierProviderFamily<ApplicantsViewModel, ApplicantsState, String>(
+final applicantsViewModelProvider = NotifierProvider.autoDispose
+    .family<ApplicantsViewModel, ApplicantsState, String>(
       ApplicantsViewModel.new,
     );

@@ -8,6 +8,7 @@ import '../storage/secure_storage.dart';
 // in Node. Every API call in the app goes through this one instance.
 class DioClient {
   late final Dio _dio;
+  late final _AuthInterceptor _authInterceptor;
   final SecureStorage _secureStorage;
 
   DioClient(this._secureStorage) {
@@ -24,11 +25,23 @@ class DioClient {
     );
 
     // Add our interceptor — this is the key piece
-    _dio.interceptors.add(_AuthInterceptor(_secureStorage, _dio));
+    _authInterceptor = _AuthInterceptor(_secureStorage, _dio);
+    _dio.interceptors.add(_authInterceptor);
   }
 
   // Expose the dio instance for making calls
   Dio get dio => _dio;
+
+  // Call this at the start of logout(). DioClient is a single long-lived
+  // instance for the whole app session — it's never recreated on
+  // login/logout. Without this, a token-refresh attempt that was already
+  // in flight when the user logged out can resolve LATER (after a new
+  // user has already logged in and saved fresh tokens) and either wipe
+  // those fresh tokens (on failure -> clearAll()) or silently overwrite
+  // them with the previous user's refreshed tokens (on success). Bumping
+  // the session epoch tells any such in-flight refresh "you're stale,
+  // discard your result" once it finally resolves.
+  void invalidateSession() => _authInterceptor.invalidateSession();
 }
 
 // The interceptor — think of this like your verifyJWT middleware in Express.
@@ -49,7 +62,17 @@ class _AuthInterceptor extends Interceptor {
   // resolves.
   Future<String?>? _refreshFuture;
 
+  // Bumped by invalidateSession() on logout — lets an in-flight refresh
+  // that resolves after a new session has already started recognize
+  // it's stale and discard itself instead of touching storage.
+  int _sessionEpoch = 0;
+
   _AuthInterceptor(this._secureStorage, this._dio);
+
+  void invalidateSession() {
+    _sessionEpoch++;
+    _refreshFuture = null;
+  }
 
   // Called BEFORE every request goes out
   @override
@@ -77,6 +100,7 @@ class _AuthInterceptor extends Interceptor {
   ) async {
     // 401 = token expired or invalid
     if (err.response?.statusCode == 401) {
+      final startEpoch = _sessionEpoch;
       try {
         // Either starts a new refresh, or — if one is already running
         // because another request 401'd moments earlier — just awaits it.
@@ -84,7 +108,12 @@ class _AuthInterceptor extends Interceptor {
         final newAccessToken = await _refreshFuture;
 
         if (newAccessToken == null) {
-          await _secureStorage.clearAll();
+          // Only clear storage if we're still in the SAME session that
+          // started this refresh — otherwise we'd be wiping out tokens
+          // a newer login already saved.
+          if (startEpoch == _sessionEpoch) {
+            await _secureStorage.clearAll();
+          }
           return handler.next(err);
         }
 
@@ -109,8 +138,10 @@ class _AuthInterceptor extends Interceptor {
       } catch (e) {
         // Only the refresh call itself (or getting a token to retry with)
         // failing lands here now — this is the actual "must log in again"
-        // case.
-        await _secureStorage.clearAll();
+        // case. Same staleness guard as above.
+        if (startEpoch == _sessionEpoch) {
+          await _secureStorage.clearAll();
+        }
         return handler.next(err);
       }
     }
@@ -119,6 +150,7 @@ class _AuthInterceptor extends Interceptor {
   }
 
   Future<String?> _refreshAccessToken() async {
+    final startEpoch = _sessionEpoch;
     try {
       final refreshToken = await _secureStorage.getRefreshToken();
       if (refreshToken == null) return null;
@@ -131,6 +163,12 @@ class _AuthInterceptor extends Interceptor {
         ApiConstants.refreshToken,
         data: {'refreshToken': refreshToken},
       );
+
+      // A logout (and possibly a fresh login) happened while this
+      // refresh was in flight. Its result belongs to a session that no
+      // longer exists — discard it instead of overwriting whatever the
+      // new session has already saved.
+      if (startEpoch != _sessionEpoch) return null;
 
       // Your backend returns { data: { accessToken } }
       final newAccessToken = response.data['data']['accessToken'] as String;
