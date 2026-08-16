@@ -12,8 +12,6 @@ The release APK connects to the deployed Job Hub backend and can be used to expl
 
 ## Screenshots
 
-## Screenshots
-
 <table>
   <tr>
     <td align="center"><b>Job Detail</b></td>
