@@ -12,10 +12,26 @@ The release APK connects to the deployed Job Hub backend and can be used to expl
 
 ## Screenshots
 
-| Job Detail                                        | Applicants                                        | Chat                                 |
-| ------------------------------------------------- | ------------------------------------------------- | ------------------------------------ |
-| ![job detail](assets/screenshots/job-detail.jpeg) | ![applicants](assets/screenshots/applicants.jpeg) | ![chat](assets/screenshots/chat.png) |
+## Screenshots
 
+<table>
+  <tr>
+    <td align="center"><b>Job Detail</b></td>
+    <td align="center"><b>Applicants</b></td>
+    <td align="center"><b>Chat</b></td>
+  </tr>
+  <tr>
+    <td>
+      <img src="assets/screenshots/job-detail.jpeg" width="220"/>
+    </td>
+    <td>
+      <img src="assets/screenshots/applicants.jpeg" width="220"/>
+    </td>
+    <td>
+      <img src="assets/screenshots/chat.png" width="220"/>
+    </td>
+  </tr>
+</table>
 ---
 
 ## Table of Contents
@@ -26,8 +42,6 @@ The release APK connects to the deployed Job Hub backend and can be used to expl
 - [Project Structure](#project-structure)
 - [Local Setup](#local-setup)
 - [Building a Release APK](#building-a-release-apk)
-- [Creating a Release with the APK](#creating-a-release-with-the-apk)
-- [Adding Screenshots](#adding-screenshots)
 
 ---
 
